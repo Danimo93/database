@@ -1,0 +1,74 @@
+-- Telle antall land i kontinent som har minst 30 land
+select Continent, count(*) as NumberOfCountries
+from country
+group by Continent
+having NumberOfCountries >= 30
+order by NumberOfCountries desc;
+
+-- Opprette tabell
+CREATE TABLE countryIsh (
+  Code CHAR(3) NOT NULL DEFAULT '',
+  Name CHAR(52) NOT NULL UNIQUE,
+  Continent ENUM('Asia','Europe' ) NOT NULL,
+  Region CHAR(26) NOT NULL DEFAULT '',
+  SurfaceArea FLOAT(10,2) NOT NULL DEFAULT 0.00,
+  IndepYear SMALLINT (6) DEFAULT NULL,  
+  Population INT(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (Code));
+
+
+-- Opprette tabell
+CREATE TABLE cityIsh
+  (
+     id          INT(11) NOT NULL AUTO_INCREMENT,
+     name        CHAR(35) NOT NULL DEFAULT '',
+     countryCode CHAR(3) NOT NULL,
+     district    CHAR(20) NOT NULL DEFAULT '',
+     population  INT(11) NOT NULL DEFAULT 0,
+     PRIMARY KEY (id),
+     CONSTRAINT fk_city_countryIsh FOREIGN KEY (countryCode) REFERENCES CountryIsh(Code)
+  );
+
+-- Legge inn data
+INSERT INTO countryIsh (Code, Name, Continent)
+VALUES ('WWW', 'Wlandet', 'Asia');
+
+INSERT INTO cityIsh (name, countryCode, population)
+VALUES ('Byen min', 'WWW', 12345);
+
+-- Oppdatere data
+UPDATE countryIsh
+SET Region = 'Wregion', Population = 74 
+WHERE Code = 'WWW';
+
+-- Slette data
+DELETE FROM countryIsh
+WHERE Code = 'WWW';
+
+ALTER TABLE cityIsh
+DROP FOREIGN KEY fk_city_countryIsh;
+
+ALTER TABLE cityIsh
+ADD CONSTRAINT fk_city_countryIsh 
+FOREIGN KEY (countryCode) REFERENCES CountryIsh(Code)
+ON DELETE CASCADE;
+
+-- Slette data - nytt forsoek
+DELETE FROM countryIsh
+WHERE Code = 'WWW';
+
+-- Fjerne tabeller
+DROP TABLE cityIsh;
+DROP TABLE countryIsh;
+
+-- Se hvilke tabeller vi har i en database:
+SHOW TABLES
+FROM world;
+
+-- eller:
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'world';
+
+-- For å se beskrivelse av en tabell:
+DESC world.city;

@@ -1,0 +1,39 @@
+--Spøøringene mot biler og deres eiere er ikke med her...
+
+SELECT CountryCode, Percentage
+FROM countrylanguage 
+WHERE Language = 'spanish' AND IsOfficial = 'T'
+ORDER BY CountryCode;
+
+SELECT Name, Percentage
+FROM country 
+JOIN countrylanguage ON Code = CountryCode
+WHERE Language = 'spanish' AND IsOfficial = 'T'
+ORDER BY Name;
+
+select country.Name, city.Name
+from Country
+join City on Code = CountryCode
+where country.Name like 'An%'
+order by country.Name;
+
+SELECT country.Name, city.Name
+FROM Country
+LEFT JOIN City ON Code = CountryCode
+WHERE country.Name like 'An%'
+ORDER BY country.Name;
+
+SELECT co.Name, ci.Name
+FROM Country AS co
+LEFT JOIN City AS ci ON co.Code = ci.CountryCode
+WHERE co.Name like 'An%'
+ORDER BY co.Name;
+
+SELECT ci.Name, ci.Population, co.name
+FROM Country AS co, City AS ci
+WHERE co.continent >= 'Europe' AND co.Code = ci.CountryCode;
+
+SELECT ci.Name, ci.Population, co.name
+FROM Country AS co JOIN City AS ci
+ON co.Code = ci.CountryCode
+WHERE co.continent >= 'Europe';
